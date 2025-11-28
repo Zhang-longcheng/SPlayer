@@ -180,7 +180,6 @@ const statusStore = useStatusStore();
         }
         &:hover {
           transform: scale(1.1);
-          backdrop-filter: blur(10px);
           background-color: rgba(var(--main-color), 0.14);
         }
         &:active {

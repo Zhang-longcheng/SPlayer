@@ -111,6 +111,7 @@ watch(
   () => statusStore.showFullPlayer,
   (newVal) => {
     if (newVal) {
+      isKeepDrawing.value = true;
       resumeDraw();
     } else {
       pauseDraw();
@@ -120,7 +121,10 @@ watch(
 );
 
 onMounted(() => {
-  if (statusStore.showFullPlayer) resumeDraw();
+  if (statusStore.showFullPlayer) {
+    isKeepDrawing.value = true;
+    resumeDraw();
+  }
 });
 
 onBeforeUnmount(() => {

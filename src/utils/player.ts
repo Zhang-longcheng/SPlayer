@@ -99,12 +99,7 @@ class Player {
    */
   private resetPlayerCore() {
     try {
-      // 仅卸载当前播放器实例
-      if (this.player) {
-        this.player.stop();
-        this.player.off();
-        this.player.unload();
-      }
+      this.player.stop();
       Howler.unload();
     } catch {
       /* empty */
@@ -125,8 +120,6 @@ class Player {
     const settingStore = useSettingStore();
     // 播放信息
     const { id, path, type } = musicStore.playSong;
-    // 统一重置底层播放器
-    this.resetPlayerCore();
     // 创建播放器
     this.player = new Howl({
       src,

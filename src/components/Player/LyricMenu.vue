@@ -1,12 +1,12 @@
 <template>
   <n-flex class="menu" justify="center" vertical>
-    <div class="menu-icon" @click="changeOffset(-500)">
+    <div class="menu-icon" @click="changeOffset(-250)">
       <SvgIcon name="Replay5" />
     </div>
     <span class="time" @click="resetOffset()">
       {{ currentTimeOffsetValue }}
     </span>
-    <div class="menu-icon" @click="changeOffset(500)">
+    <div class="menu-icon" @click="changeOffset(250)">
       <SvgIcon name="Forward5" />
     </div>
     <div class="divider" />
