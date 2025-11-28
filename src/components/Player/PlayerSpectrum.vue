@@ -5,6 +5,7 @@
 </template>
 
 <script setup lang="ts">
+import { useStatusStore } from "@/stores";
 import { usePlayer } from "@/utils/player";
 
 const props = defineProps<{
@@ -15,6 +16,7 @@ const props = defineProps<{
 }>();
 
 const player = usePlayer();
+const statusStore = useStatusStore();
 
 // canvas
 const canvasRef = ref<HTMLCanvasElement | null>(null);
@@ -98,12 +100,27 @@ const roundRect = (
 };
 
 // 开始绘制频谱
-const { pause: pauseDraw, resume: resumeDraw } = useRafFn(() => {
-  drawSpectrum();
-});
+const { pause: pauseDraw, resume: resumeDraw } = useRafFn(
+  () => {
+    drawSpectrum();
+  },
+  { immediate: false },
+);
+
+watch(
+  () => statusStore.showFullPlayer,
+  (newVal) => {
+    if (newVal) {
+      resumeDraw();
+    } else {
+      pauseDraw();
+      isKeepDrawing.value = false;
+    }
+  },
+);
 
 onMounted(() => {
-  resumeDraw();
+  if (statusStore.showFullPlayer) resumeDraw();
 });
 
 onBeforeUnmount(() => {

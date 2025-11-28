@@ -2,7 +2,7 @@
   <Teleport to="body">
     <Transition name="up" mode="out-in">
       <div
-        v-if="statusStore.showFullPlayer"
+        v-show="statusStore.showFullPlayer"
         :style="{
           '--main-color': statusStore.mainColor,
           cursor: statusStore.playerMetaShow || isShowComment ? 'auto' : 'none',
@@ -28,6 +28,7 @@
         <!-- 主内容 -->
         <Transition name="zoom" mode="out-in">
           <div
+            v-if="statusStore.showFullPlayer"
             :key="playerContentKey"
             :class="[
               'player-content',

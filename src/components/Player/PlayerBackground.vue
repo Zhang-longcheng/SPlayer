@@ -21,6 +21,7 @@
       <!-- 流体效果 -->
       <BackgroundRender
         v-else-if="settingStore.playerBackgroundType === 'animation'"
+        :playing="statusStore.showFullPlayer"
         :album="musicStore.songCover"
         :fps="settingStore.playerBackgroundFps ?? 60"
         :flowSpeed="settingStore.playerBackgroundFlowSpeed ?? 4"

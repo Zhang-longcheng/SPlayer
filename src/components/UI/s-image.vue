@@ -1,17 +1,17 @@
 <!-- 图片组件 -->
 <template>
-  <Transition name="fade" mode="out-in">
-    <div ref="imgContainer" :key="src" class="s-image">
-      <!-- 加载图片 -->
-      <Transition name="fade">
-        <img v-if="!isLoaded" :src="defaultSrc" class="loading" alt="loading" />
-      </Transition>
-      <!-- 真实图片 -->
+  <div ref="imgContainer" class="s-image">
+    <!-- 加载图片 -->
+    <Transition name="fade">
+      <img v-if="!isLoaded" :src="defaultSrc" class="loading" alt="loading" />
+    </Transition>
+    <!-- 真实图片 -->
+    <Transition name="fade" mode="out-in">
       <img
         v-if="imgSrc"
         ref="imgRef"
-        :src="imgSrc"
         :key="imgSrc"
+        :src="imgSrc"
         :alt="alt || 'image'"
         :class="['cover', { loaded: isLoaded }]"
         :decoding="decodeAsync ? 'async' : 'auto'"
@@ -19,8 +19,8 @@
         @load="imageLoaded"
         @error="imageError"
       />
-    </div>
-  </Transition>
+    </Transition>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -148,10 +148,9 @@ watch(
 );
 
 onUnmounted(() => {
-  try {
-    if (imgRef.value) imgRef.value.src = "";
-  } catch {
-    /* empty */
+  if (imgRef.value) {
+    imgRef.value.src = "";
+    imgRef.value.remove();
   }
   imgSrc.value = undefined;
   imgRef.value = undefined;
