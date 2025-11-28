@@ -73,8 +73,7 @@
     "pinia": "^3.0.4",
     "pinia-plugin-persistedstate": "^4.7.1",
     "plyr": "^3.8.3",
-    "sortablejs": "^1.15.6",
-    "vue-virt-list": "^1.6.1"
+    "sortablejs": "^1.15.6"
   },
   "devDependencies": {
     "@electron-toolkit/preload": "^3.0.1",
