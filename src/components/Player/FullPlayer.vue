@@ -2,7 +2,7 @@
   <Teleport to="body">
     <Transition name="up" mode="out-in">
       <div
-        v-show="statusStore.showFullPlayer"
+        v-if="statusStore.showFullPlayer"
         :style="{
           '--main-color': statusStore.mainColor,
           cursor: statusStore.playerMetaShow || isShowComment ? 'auto' : 'none',
@@ -39,10 +39,10 @@
             ]"
             @mousemove="playerMove"
           >
-            <Transition name="zoom">
+            <Transition name="zoom" mode="out-in">
               <div v-if="!pureLyricMode" :key="musicStore.playSong.id" class="content-left">
                 <!-- 封面 -->
-                <PlayerCover />
+                <PlayerCover :key="`cover-${musicStore.playSong.id}`" />
                 <!-- 数据 -->
                 <PlayerData :center="playerDataCenter" :theme="statusStore.mainColor" />
               </div>
@@ -57,8 +57,8 @@
                 :light="pureLyricMode"
               />
               <!-- 歌词 -->
-              <MainAMLyric v-if="settingStore.useAMLyrics" />
-              <MainLyric v-else />
+              <MainAMLyric v-if="settingStore.useAMLyrics" :key="`am-lyric-${musicStore.playSong.id}`" />
+              <MainLyric v-else :key="`lyric-${musicStore.playSong.id}`" />
             </div>
           </div>
         </Transition>
@@ -107,8 +107,10 @@ const pureLyricMode = computed<boolean>(
   () => (statusStore.pureLyricMode && musicStore.isHasLrc) || musicStore.playSong.type === "radio",
 );
 
-// 主内容 key
-const playerContentKey = computed(() => `${statusStore.pureLyricMode}`);
+// 主内容 key - 包含歌曲 ID 和纯净模式，确保切换歌曲时组件重新渲染
+const playerContentKey = computed(
+  () => `${musicStore.playSong.id}-${statusStore.pureLyricMode}`,
+);
 
 // 数据是否居中
 const playerDataCenter = computed<boolean>(

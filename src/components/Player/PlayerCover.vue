@@ -70,6 +70,9 @@ const { start: dynamicCoverStart, stop: dynamicCoverStop } = useTimeoutFn(
 
 // 获取动态封面
 const getDynamicCover = async () => {
+  // 先清理旧的动态封面
+  cleanupDynamicCover();
+
   if (
     isLogin() !== 1 ||
     musicStore.playSong.path ||
@@ -78,6 +81,7 @@ const getDynamicCover = async () => {
     settingStore.playerType !== "cover"
   )
     return;
+
   dynamicCoverStop();
   dynamicCoverLoaded.value = false;
   const result = await songDynamicCover(musicStore.playSong.id);
@@ -96,7 +100,9 @@ const dynamicCoverEnded = () => {
 
 watch(
   () => [musicStore.playSong.id, settingStore.dynamicCover, settingStore.playerType],
-  () => getDynamicCover(),
+  () => {
+    getDynamicCover();
+  },
 );
 
 onMounted(getDynamicCover);
@@ -106,6 +112,10 @@ onBeforeUnmount(() => {
   dynamicCoverStop();
   // 清理动态封面资源
   cleanupDynamicCover();
+  // 强制清理所有引用
+  videoRef.value = null;
+  dynamicCover.value = "";
+  dynamicCoverLoaded.value = false;
 });
 </script>
 

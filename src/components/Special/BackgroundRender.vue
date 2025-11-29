@@ -95,7 +95,14 @@ onMounted(() => {
 
 onUnmounted(() => {
   if (bgRenderRef.value) {
-    bgRenderRef.value.dispose();
+    try {
+      // 先暂停渲染
+      bgRenderRef.value.pause();
+      // 清理资源
+      bgRenderRef.value.dispose();
+    } catch (e) {
+      console.error("Error disposing background render:", e);
+    }
     bgRenderRef.value = undefined;
   }
 });

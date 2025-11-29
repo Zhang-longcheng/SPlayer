@@ -206,6 +206,16 @@ const localCover = async (show: boolean) => {
   const blobURL = blob.createBlobURL(data, format, song.value.path);
   if (blobURL) song.value.cover = blobURL;
 };
+
+// 清理 blob URL
+onBeforeUnmount(() => {
+  if (song.value.cover && song.value.cover.startsWith("blob:")) {
+    // 从 blob manager 中查找并清理
+    if (song.value.path) {
+      blob.revokeBlobURL(song.value.path);
+    }
+  }
+});
 </script>
 
 <style lang="scss" scoped>

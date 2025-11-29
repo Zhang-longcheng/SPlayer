@@ -29,19 +29,19 @@ const props = withDefaults(
     src: string | undefined;
     defaultSrc?: string;
     alt?: string;
-    // 是否进行可视状态变化
+    /* 是否进行可视状态变化 */
     observeVisibility?: boolean;
-    // 在不可视时是否释放图片以回收内存
+    /* 在不可视时是否释放图片以回收内存 */
     releaseOnHide?: boolean;
-    // 是否使用浏览器异步解码
+    /* 是否使用浏览器异步解码 */
     decodeAsync?: boolean;
-    // 是否使用原生懒加载
+    /* 是否使用原生懒加载 */
     nativeLazy?: boolean;
   }>(),
   {
     defaultSrc: "/images/song.jpg?assest",
     observeVisibility: true,
-    releaseOnHide: false,
+    releaseOnHide: true,
     decodeAsync: true,
     nativeLazy: true,
   },
@@ -112,7 +112,9 @@ watch(
       }
     } else if (props.releaseOnHide) {
       // 释放图片以回收内存
+      if (imgRef.value) imgRef.value.src = "";
       if (imgSrc.value !== undefined) imgSrc.value = undefined;
+      isLoaded.value = false;
     }
   },
   { immediate: true },
@@ -148,13 +150,23 @@ watch(
 );
 
 onUnmounted(() => {
+  // 清理图片元素
   if (imgRef.value) {
+    // 先清空 src，避免继续加载
     imgRef.value.src = "";
+    // 移除事件监听器
+    imgRef.value.onload = null;
+    imgRef.value.onerror = null;
+    // 从 DOM 中移除
     imgRef.value.remove();
   }
+  // 清理响应式引用
   imgSrc.value = undefined;
   imgRef.value = undefined;
   imgContainer.value = undefined;
+  // 重置状态
+  isLoaded.value = false;
+  lastShowState.value = null;
 });
 </script>
 
